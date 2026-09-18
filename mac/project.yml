@@ -1,0 +1,33 @@
+name: CopybaraMac
+options:
+  bundleIdPrefix: com.copybara
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+targets:
+  CopybaraMac:
+    type: application
+    platform: macOS
+    sources:
+      - Sources
+    settings:
+      base:
+        PRODUCT_NAME: Copybara
+        PRODUCT_BUNDLE_IDENTIFIER: com.copybara.mac
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.0"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: Copybara
+        LSUIElement: true
+        NSLocalNetworkUsageDescription: "Copybara finds your iPad on the local network to send it clipboard items."
+        NSBonjourServices:
+          - _copybara._tcp
