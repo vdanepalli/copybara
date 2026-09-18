@@ -98,10 +98,16 @@ prompt. When it finds the iPad, the icon fills in and the menu says
 
 ### 4. (Recommended) Make the Mac agent auto-start at login
 
-So a Mac restart doesn't need you to reopen it:
+So a Mac restart doesn't need you to reopen it, install the login item
+(a LaunchAgent that opens Copybara once at each login):
 
-**System Settings → General → Login Items → Open at Login → +** → choose
-`/Applications/Copybara.app`.
+```bash
+copybara/scripts/login-item.sh install
+```
+
+Remove it anytime with `copybara/scripts/login-item.sh uninstall`. (Prefer the
+GUI? System Settings → General → Login Items → + → `/Applications/Copybara.app`
+does the same thing.)
 
 ### 5. Test it
 
@@ -157,8 +163,13 @@ See [Weekly re-sign](#weekly-re-sign-free-apple-id).
 
 When the iPad app stops launching (~7 days), re-run it from Xcode (⌘R with the
 iPad connected) — ~30 seconds, your settings survive. To avoid this entirely:
-- use a **paid Apple Developer account** ($99/yr → 1-year signing), or
-- use **SideStore/AltStore**, which auto-re-signs free-account apps over Wi-Fi.
+- use a **paid Apple Developer account** ($99/yr → 1-year signing). Cleanest
+  option, and safe on a work laptop (no extra tooling, no stored credentials
+  beyond Xcode's own).
+- **SideStore/AltStore** can auto-re-sign free-account apps over Wi-Fi, **but**
+  they store your Apple ID credentials and install a background service / on-device
+  VPN profile. Fine for a *personal* Mac; **avoid on a managed work laptop** — it
+  can violate IT policy and trip endpoint security. Not recommended here.
 
 ---
 
