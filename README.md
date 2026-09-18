@@ -75,8 +75,8 @@ open copybara/ios/Copybara.xcodeproj
 ```
 
 In Xcode:
-1. Select the **Copybara** scheme and your iPad (**copper m4**) as the run target.
-2. Signing & Capabilities → Team → your Apple ID (already set to team `99V875JU84`).
+1. Select the **Copybara** scheme and your iPad as the run target.
+2. Signing & Capabilities → Team → select your Apple ID (automatic signing).
 3. Press **Run** (⌘R).
 4. On the iPad, first launch only: Settings → General → VPN & Device Management →
    trust your developer certificate, then reopen the app.
@@ -171,8 +171,8 @@ Requirements on the PC: **Python 3** (`python --version` should work) on the
 
 ### Install (once)
 
-1. Copy the contents of `windows/` into your target folder, e.g.
-   `C:\Users\vinayd\VDesktop\CCFD_PROD\Scripts\Copybara`.
+1. Copy the contents of `windows/` into a folder of your choice, e.g.
+   `C:\Users\<you>\Tools\Copybara`.
 2. Make sure `SHARED_SECRET` in `copybara_win.py` matches the value in the
    Mac/iPad `Protocol.swift`.
 3. Double-click **`setup.bat`**. It creates `.venv` inside the folder and installs

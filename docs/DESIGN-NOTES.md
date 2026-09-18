@@ -64,7 +64,7 @@ on `.ready`), so the latest copy is applied immediately on return.
 
 ## Signing / distribution
 
-- Built with a **free Apple ID** (personal team `99V875JU84`). Signature expires
+- Built with a **free Apple ID** (a personal team). Signature expires
   ~7 days → the iPad app must be re-run from Xcode to refresh. Paid account or
   SideStore/AltStore removes the weekly step.
 - Command-line `xcodebuild` can't provision for a free personal team ("No Account
