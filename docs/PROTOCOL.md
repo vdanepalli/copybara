@@ -6,8 +6,10 @@ iPad: `ios/Sources/Protocol.swift`). Keep them in sync.
 ## Roles
 
 - **iPad = server.** Advertises a Bonjour service and listens for connections.
-- **Mac = client.** Browses for the service, connects, and pushes clipboard
-  changes. (One-directional: Mac → iPad only.)
+- **Sender = client.** Browses for the service, connects, and pushes clipboard
+  changes. A sender can be the **Mac agent** (`mac/`) or the **Windows sender**
+  (`windows/`) — the iPad accepts either, and multiple at once. One-directional:
+  computer → iPad only.
 
 ## Discovery
 

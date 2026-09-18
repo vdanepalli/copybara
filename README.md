@@ -1,10 +1,11 @@
 # Copybara 🦫
 
-A tiny personal tool that mimics **Universal Clipboard in one direction: Mac → iPad**,
-for when Handoff/Continuity is blocked (e.g. by MDM on the Mac).
+A tiny personal tool that mimics **Universal Clipboard in one direction:
+computer → iPad**, for when Handoff/Continuity is blocked (e.g. by MDM).
 
-Copy anything on the Mac — styled text, code, images — and it lands on the iPad
-clipboard. You just paste (e.g. into GoodNotes).
+Copy anything on a **Mac** or **Windows** PC — styled text, code, images — and it
+lands on the iPad clipboard. You just paste (e.g. into GoodNotes). The iPad app is
+the same for both; each computer runs a small sender.
 
 ## How it works
 
@@ -159,6 +160,34 @@ See [Weekly re-sign](#weekly-re-sign-free-apple-id).
 
 ---
 
+## Windows → iPad
+
+The iPad app is identical; Windows just runs a small Python sender that speaks the
+same encrypted protocol. **No admin rights needed.**
+
+Requirements on the PC: **Python 3** (`python --version` should work) on the
+**same Wi-Fi** as the iPad.
+
+1. Copy the `windows/` folder to the PC (anywhere in your user profile).
+2. Make sure `SHARED_SECRET` in `windows/copybara_win.py` matches the value in the
+   Mac/iPad `Protocol.swift`.
+3. Open the Copybara app on the iPad (Split View next to GoodNotes).
+4. Double-click **`run.bat`** (or `python copybara_win.py`). First run installs
+   the deps into your user profile (`cryptography pywin32 pillow zeroconf`).
+5. Copy on Windows → paste on the iPad.
+
+It finds the iPad automatically via Bonjour. If discovery fails on a locked-down
+network, set `FALLBACK_HOST`/`FALLBACK_PORT` near the top of `copybara_win.py`
+(the port is the one the iPad app prints/advertises).
+
+Notes:
+- Same iPad rule applies: clips are written only while Copybara is the active app
+  (Split View).
+- If `python` maps to the Microsoft Store stub, use `py` instead (the `.bat`
+  hints at this).
+- Corporate app-allowlisting (AppLocker/WDAC) usually allows scripts run via your
+  own Python; if a security tool blocks it, that's an IT policy, not a bug.
+
 ## Weekly re-sign (free Apple ID)
 
 When the iPad app stops launching (~7 days), re-run it from Xcode (⌘R with the
@@ -177,9 +206,11 @@ iPad connected) — ~30 seconds, your settings survive. To avoid this entirely:
 
 ```
 copybara/
-  mac/    macOS menu-bar agent (SwiftUI MenuBarExtra + Network + CryptoKit)
-  ios/    iPad app (SwiftUI + Network listener + CryptoKit)
-  docs/   protocol notes
+  mac/      macOS menu-bar agent (SwiftUI MenuBarExtra + Network + CryptoKit)
+  ios/      iPad app (SwiftUI + Network listener + CryptoKit)
+  windows/  Windows sender (Python: cryptography + pywin32 + pillow + zeroconf)
+  scripts/  Mac login-item (LaunchAgent) install/uninstall
+  docs/     protocol + design notes
 ```
 
 Both sides share an identical `Protocol.swift` (service name, shared secret,
