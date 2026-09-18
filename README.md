@@ -245,3 +245,7 @@ connection to it and it forwards the encrypted blobs, so they no longer need to
 be on the same LAN. The relay only ever sees ciphertext. (You'd still keep
 Copybara in Split View on the iPad — the relay only changes *how the two devices
 reach each other*, not the on-iPad paste behavior.)
+
+## License
+
+MIT — see [LICENSE](LICENSE).
