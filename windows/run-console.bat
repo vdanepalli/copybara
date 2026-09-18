@@ -14,7 +14,7 @@ if not exist ".venv\Scripts\python.exe" (
 
 echo [Copybara] Running in this window. Press Ctrl+C to stop.
 echo.
-".venv\Scripts\python.exe" -u "%~dp0copybara_win.py"
+".venv\Scripts\python.exe" -X utf8 -u "%~dp0copybara_win.py"
 echo.
 echo [Copybara] Sender exited.
 pause

@@ -7,7 +7,8 @@ the LAN, using the exact same wire protocol as the Mac agent:
   - encrypts each clip with ChaCha20-Poly1305 under SHA256(shared secret)
   - sends length-prefixed frames: 4-byte big-endian length + ciphertext
 
-No admin rights needed. Run via run.bat (installs deps into your user profile).
+No admin rights needed. Set up with setup.bat (isolated .venv in this folder),
+then start.bat / stop.bat / status.bat, or run-console.bat to watch live.
 
 The iPad still only *applies* clips while it is the active app — keep Copybara
 in Split View next to GoodNotes for hands-free paste (same as with the Mac).
@@ -179,9 +180,9 @@ def find_ipad():
 def summary(msg: dict) -> str:
     if msg.get("text"):
         t = msg["text"].replace("\n", " ")
-        return (t[:50] + "…") if len(t) > 50 else t
+        return (t[:50] + "...") if len(t) > 50 else t
     if msg.get("pngBase64"):
-        return "🖼 image"
+        return "[image]"
     if msg.get("html"):
         return "styled text"
     return "empty"
@@ -191,12 +192,12 @@ def serve_once():
     target = find_ipad()
     if not target:
         print("[copybara] iPad not found on the network. Is the Copybara app open on the iPad,"
-              " and are both devices on the same Wi-Fi? Retrying…")
+              " and are both devices on the same Wi-Fi? Retrying...")
         time.sleep(3)
         return
 
     host, port = target
-    print(f"[copybara] connecting to iPad at {host}:{port} …")
+    print(f"[copybara] connecting to iPad at {host}:{port} ...")
     sock = socket.create_connection((host, port), timeout=8)
     sock.settimeout(None)
     print("[copybara] connected. Copy anything on Windows; paste on the iPad (Split View).")
@@ -229,7 +230,15 @@ def serve_once():
 
 
 def main():
-    print("Copybara — Windows → iPad clipboard sender")
+    # Force UTF-8 stdio so printing copied text (emoji, accents) never crashes,
+    # even under the Microsoft Store Python's cp1252 default.
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+    print("Copybara - Windows to iPad clipboard sender")
     print("Press Ctrl+C to quit.\n")
     while True:
         try:
@@ -238,7 +247,7 @@ def main():
             print("\n[copybara] bye")
             sys.exit(0)
         except Exception as e:
-            print(f"[copybara] disconnected ({e}); reconnecting…")
+            print(f"[copybara] disconnected ({e}); reconnecting...")
             time.sleep(2)
 
 
