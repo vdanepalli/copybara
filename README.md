@@ -163,30 +163,49 @@ See [Weekly re-sign](#weekly-re-sign-free-apple-id).
 ## Windows → iPad
 
 The iPad app is identical; Windows just runs a small Python sender that speaks the
-same encrypted protocol. **No admin rights needed.**
+same encrypted protocol. **No admin rights needed**, and everything is **isolated
+to its own folder** (a local `.venv`) so it can't affect other scripts.
 
 Requirements on the PC: **Python 3** (`python --version` should work) on the
 **same Wi-Fi** as the iPad.
 
-1. Copy the `windows/` folder to the PC (anywhere in your user profile).
-2. Make sure `SHARED_SECRET` in `windows/copybara_win.py` matches the value in the
+### Install (once)
+
+1. Copy the contents of `windows/` into your target folder, e.g.
+   `C:\Users\vinayd\VDesktop\CCFD_PROD\Scripts\Copybara`.
+2. Make sure `SHARED_SECRET` in `copybara_win.py` matches the value in the
    Mac/iPad `Protocol.swift`.
-3. Open the Copybara app on the iPad (Split View next to GoodNotes).
-4. Double-click **`run.bat`** (or `python copybara_win.py`). First run installs
-   the deps into your user profile (`cryptography pywin32 pillow zeroconf`).
-5. Copy on Windows → paste on the iPad.
+3. Double-click **`setup.bat`**. It creates `.venv` inside the folder and installs
+   `cryptography pywin32 pillow zeroconf` there — nothing global, nothing shared.
 
-It finds the iPad automatically via Bonjour. If discovery fails on a locked-down
-network, set `FALLBACK_HOST`/`FALLBACK_PORT` near the top of `copybara_win.py`
-(the port is the one the iPad app prints/advertises).
+### Run / control (batch files, with feedback)
 
-Notes:
+| File | What it does |
+|------|--------------|
+| `start.bat` | Starts the sender in the background; prints its PID; refuses to double-start. |
+| `stop.bat`  | Stops it (by PID). |
+| `status.bat`| Shows **RUNNING/STOPPED** + the last dozen log lines (and any errors). |
+| `run-console.bat` | Runs it in the current window so you can watch the live log (Ctrl+C to stop). Best for the first test. |
+
+Typical use: open the Copybara app on the iPad (Split View next to GoodNotes),
+run **`start.bat`**, then copy on Windows and paste on the iPad. Check
+**`status.bat`** anytime to confirm it's alive; **`stop.bat`** to end it.
+
+Runtime files created in the folder: `copybara.pid`, `copybara.log`,
+`copybara.err.log` (safe to delete when stopped).
+
+### Notes
+
+- It finds the iPad automatically via Bonjour. If discovery fails on a locked-down
+  network, set `FALLBACK_HOST`/`FALLBACK_PORT` near the top of `copybara_win.py`
+  (the iPad's Wi-Fi IP and the advertised port).
 - Same iPad rule applies: clips are written only while Copybara is the active app
   (Split View).
-- If `python` maps to the Microsoft Store stub, use `py` instead (the `.bat`
-  hints at this).
+- If `python` maps to the Microsoft Store stub, `setup.bat` falls back to `py`.
 - Corporate app-allowlisting (AppLocker/WDAC) usually allows scripts run via your
   own Python; if a security tool blocks it, that's an IT policy, not a bug.
+- The control scripts use inline PowerShell (`-Command`) for PID handling, which
+  works under the default execution policy (no `.ps1` files are run).
 
 ## Weekly re-sign (free Apple ID)
 

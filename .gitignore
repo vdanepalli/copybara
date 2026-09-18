@@ -20,3 +20,8 @@ xcuserdata/
 # Python
 __pycache__/
 *.pyc
+
+# Windows sender runtime (created inside the deployed folder)
+windows/.venv/
+windows/*.log
+windows/*.pid
